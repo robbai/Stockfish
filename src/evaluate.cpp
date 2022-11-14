@@ -1082,6 +1082,9 @@ Value Eval::evaluate(const Position& pos, int* complexity) {
 
       optimism = optimism * (269 + nnueComplexity) / 256;
       v = (nnue * scale + optimism * (scale - 754)) / 1024;
+
+      if (popcount(shift<NORTH>(pos.pieces(WHITE, PAWN)) & pos.pieces(BLACK, PAWN)) > 5)
+        v = (v * 7) / 8;
   }
 
   // Damp down the evaluation linearly when shuffling
