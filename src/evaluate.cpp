@@ -1086,7 +1086,7 @@ Value Eval::evaluate(const Position& pos, int* complexity) {
       Bitboard fence = shift<NORTH>(shift<NORTH_EAST>(pos.pieces(WHITE, PAWN)) & pos.pieces(WHITE, PAWN)) & shift<NORTH_EAST>(pos.pieces(BLACK, PAWN)) & pos.pieces(BLACK, PAWN);
       fence |= shift<NORTH>(shift<SOUTH_EAST>(pos.pieces(WHITE, PAWN)) & pos.pieces(WHITE, PAWN)) & shift<SOUTH_EAST>(pos.pieces(BLACK, PAWN)) & pos.pieces(BLACK, PAWN);
       if (popcount(fence) > 2)
-        v = (v * 7) / 8;
+        v = (v * 3) / 4;
   }
 
   // Damp down the evaluation linearly when shuffling
