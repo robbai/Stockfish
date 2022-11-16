@@ -1082,6 +1082,11 @@ Value Eval::evaluate(const Position& pos, int* complexity) {
 
       optimism = optimism * (269 + nnueComplexity) / 256;
       v = (nnue * scale + optimism * (scale - 754)) / 1024;
+
+      Bitboard fence = shift<NORTH>(shift<NORTH_EAST>(pos.pieces(WHITE, PAWN)) & pos.pieces(WHITE, PAWN)) & shift<NORTH_EAST>(pos.pieces(BLACK, PAWN)) & pos.pieces(BLACK, PAWN);
+      fence |= shift<NORTH>(shift<SOUTH_EAST>(pos.pieces(WHITE, PAWN)) & pos.pieces(WHITE, PAWN)) & shift<SOUTH_EAST>(pos.pieces(BLACK, PAWN)) & pos.pieces(BLACK, PAWN);
+      if (popcount(fence) > 2)
+        v = (v * 7) / 8;
   }
 
   // Damp down the evaluation linearly when shuffling
