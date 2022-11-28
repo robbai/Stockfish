@@ -164,6 +164,7 @@ public:
   Value psq_eg_stm() const;
   Value non_pawn_material(Color c) const;
   Value non_pawn_material() const;
+  int fence_count() const;
 
   // Position consistency check, for debugging
   bool pos_is_ok() const;
@@ -187,6 +188,7 @@ private:
   void do_castling(Color us, Square from, Square& to, Square& rfrom, Square& rto);
   template<bool AfterMove>
   Key adjust_key50(Key k) const;
+  void set_pawn_fence();
 
   // Data members
   Piece board[SQUARE_NB];
@@ -202,6 +204,7 @@ private:
   Color sideToMove;
   Score psq;
   bool chess960;
+  int fenceCount;
 };
 
 extern std::ostream& operator<<(std::ostream& os, const Position& pos);
@@ -379,6 +382,10 @@ inline bool Position::opposite_bishops() const {
 
 inline bool Position::is_chess960() const {
   return chess960;
+}
+
+inline int Position::fence_count() const {
+  return fenceCount;
 }
 
 inline bool Position::capture(Move m) const {

@@ -206,6 +206,8 @@ namespace {
       {}, {}, {805, 1292}, {650, 984}, {1071, 1886}, {730, 1128}
   };
 
+  constexpr int PawnFenceDampen[7] = { 256, 244, 225, 219, 214, 208, 190 };
+
 #define S(mg, eg) make_score(mg, eg)
 
   // MobilityBonus[PieceType-2][attacked] contains bonuses for middle and end game,
@@ -1082,6 +1084,9 @@ Value Eval::evaluate(const Position& pos, int* complexity) {
 
       optimism = optimism * (269 + nnueComplexity) / 256;
       v = (nnue * scale + optimism * (scale - 754)) / 1024;
+
+      if (pos.fence_count())
+        v = (v * PawnFenceDampen[pos.fence_count() - 1]) / 256;
   }
 
   // Damp down the evaluation linearly when shuffling
