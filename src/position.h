@@ -385,7 +385,9 @@ inline bool Position::is_chess960() const {
 }
 
 inline int Position::fence_count() const {
-  return fenceCount;
+  Bitboard fence = ((shift<NORTH>(shift<NORTH_EAST>(pieces(WHITE, PAWN)) & pieces(WHITE, PAWN)) & shift<NORTH_EAST>(pieces(BLACK, PAWN))) |
+    (shift<NORTH>(shift<SOUTH_EAST>(pieces(WHITE, PAWN)) & pieces(WHITE, PAWN)) & shift<SOUTH_EAST>(pieces(BLACK, PAWN)))) & pieces(BLACK, PAWN);
+  return popcount(fence);
 }
 
 inline bool Position::capture(Move m) const {
