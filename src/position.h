@@ -188,7 +188,6 @@ private:
   void do_castling(Color us, Square from, Square& to, Square& rfrom, Square& rto);
   template<bool AfterMove>
   Key adjust_key50(Key k) const;
-  void set_pawn_fence();
 
   // Data members
   Piece board[SQUARE_NB];
@@ -204,7 +203,6 @@ private:
   Color sideToMove;
   Score psq;
   bool chess960;
-  int fenceCount;
 };
 
 extern std::ostream& operator<<(std::ostream& os, const Position& pos);

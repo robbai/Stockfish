@@ -218,8 +218,6 @@ Position& Position::set(const string& fenStr, bool isChess960, StateInfo* si, Th
       }
   }
 
-  set_pawn_fence();
-
   // 2. Active color
   ss >> token;
   sideToMove = (token == 'w' ? WHITE : BLACK);
@@ -678,13 +676,6 @@ bool Position::gives_check(Move m) const {
 }
 
 
-void Position::set_pawn_fence() {
-  Bitboard fence = ((shift<NORTH>(shift<NORTH_EAST>(pieces(WHITE, PAWN)) & pieces(WHITE, PAWN)) & shift<NORTH_EAST>(pieces(BLACK, PAWN))) |
-    (shift<NORTH>(shift<SOUTH_EAST>(pieces(WHITE, PAWN)) & pieces(WHITE, PAWN)) & shift<SOUTH_EAST>(pieces(BLACK, PAWN)))) & pieces(BLACK, PAWN);
-  fenceCount = popcount(fence);
-}
-
-
 /// Position::do_move() makes a move, and saves all information necessary
 /// to a StateInfo object. The move is assumed to be legal. Pseudo-legal
 /// moves should be filtered out before this function is called.
@@ -879,9 +870,6 @@ void Position::do_move(Move m, StateInfo& newSt, bool givesCheck) {
   // Update king attacks used for fast check detection
   set_check_info(st);
 
-  if (type_of(captured) == PAWN || type_of(pc) == PAWN)
-    set_pawn_fence();
-
   // Calculate the repetition info. It is the ply distance from the previous
   // occurrence of the same position, negative in the 3-fold case, or zero
   // if the position was not repeated.
@@ -960,9 +948,6 @@ void Position::undo_move(Move m) {
           put_piece(st->capturedPiece, capsq); // Restore the captured piece
       }
   }
-
-  if (type_of(st->capturedPiece) == PAWN || type_of(pc) == PAWN)
-    set_pawn_fence();
 
   // Finally point our state pointer back to the previous state
   st = st->previous;
