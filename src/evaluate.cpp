@@ -1082,6 +1082,16 @@ Value Eval::evaluate(const Position& pos, int* complexity) {
 
       optimism = optimism * (278 + nnueComplexity) / 256;
       v = (nnue * scale + optimism * (scale - 755)) / 1024;
+
+      int vv = pos.count<PAWN>(WHITE) - pos.count<PAWN>(BLACK)
+        + (pos.count<BISHOP>(WHITE) - pos.count<BISHOP>(BLACK)) * 3
+        + (pos.count<KNIGHT>(WHITE) - pos.count<KNIGHT>(BLACK)) * 3
+        + (pos.count<ROOK>(WHITE) - pos.count<ROOK>(BLACK)) * 5
+        + (pos.count<QUEEN>(WHITE) - pos.count<QUEEN>(BLACK)) * 9;
+      vv *= Value(pos.side_to_move() == WHITE ? PawnValueEg : -PawnValueEg);
+
+      if (v > vv)
+          v += (v - vv) / 16;
   }
 
   // Damp down the evaluation linearly when shuffling
