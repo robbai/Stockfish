@@ -150,6 +150,7 @@ public:
   Key key_after(Move m) const;
   Key material_key() const;
   Key pawn_key() const;
+  Key raw_key() const;
 
   // Other properties of the position
   Color side_to_move() const;
@@ -345,6 +346,10 @@ inline Key Position::pawn_key() const {
 
 inline Key Position::material_key() const {
   return st->materialKey;
+}
+
+inline Key Position::raw_key() const {
+  return st->key;
 }
 
 inline Score Position::psq_score() const {
