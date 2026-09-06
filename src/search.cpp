@@ -999,7 +999,7 @@ Value Search::Worker::search(
         Value futilityMult = std::min(45 + depth * 4, 85);
         futilityMult -= 20 * !ss->ttHit;
 
-        Value futilityMargin = futilityMult * depth
+        Value futilityMargin = futilityMult * ((depth - 1) | 1)
                              - (2789 * improving + 335 * opponentWorsening) * futilityMult / 1024
                              + std::abs(correctionValue) / 198435;
 
